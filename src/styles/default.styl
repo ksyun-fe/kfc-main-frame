@@ -1,0 +1,30 @@
+/* $input-width := unit(500 / 14, rem) */
+$box-margin = 20px
+$margin = 16px
+$padding = 16px
+$input-margin = 30px
+$button-margin = 16px
+$background-color = #F5F6Fb
+$background-color2 = #F1F1F5
+$border-color = #D5D8DF
+$border = 1px solid $border-color
+
+$color = #374254
+$active-color = #0091EA
+
+$tabs()
+  width 130px
+  padding 0px $button-margin
+  text-align left
+  border $border
+  border-right none
+  background #F1F1F5
+  color $color
+  &:last-child
+    border-right $border
+  &:hover
+    background #D5D8DF
+    color $color
+  &.k-active
+    background #fff
+    color $active-color

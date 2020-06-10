@@ -1,0 +1,74 @@
+.k-progress-container {
+    height: 2px;
+    background-color: #eaeef2;
+    overflow: hidden;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    -webkit-transition: all .2s ease .1s;
+    transition: all .2s ease .1s;
+}
+.k-progress-container.stop{
+    opacity: 0;
+}
+.k-progress-container .k-content{
+    position: relative;
+    height: 100%;
+    border-radius: 1.142857142857143rem;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    width: 100%;
+}
+.k-progress-container .k-content .k-bg {
+    width: 0;
+    background-color: #0a5eee;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+    position: relative;
+    height: 100%;
+    border-radius: 1.142857142857143rem;
+}
+.k-progress-container.stop .k-content .k-bg{
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+@-webkit-keyframes progress-bar-animation {
+    0% {
+        opacity: .2;
+        width: 1rem;
+        margin-left: -1rem
+    }
+
+    to {
+        opacity: 0;
+        width: 100%
+    }
+}
+
+@keyframes progress-bar-animation {
+    0% {
+        opacity: .2;
+        width: 1rem;
+        margin-left: -1rem
+    }
+
+    to {
+        opacity: 0;
+        width: 100%
+    }
+}
+.k-progress-container .k-content .k-bg:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #fff;
+    -webkit-animation: progress-bar-animation 2s ease infinite;
+    animation: progress-bar-animation 2s ease infinite;
+    border-radius: 1.142857142857143rem;
+}
