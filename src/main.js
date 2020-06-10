@@ -22,10 +22,14 @@ Vue.mixin(mixin)
 
 Vue.config.productionTip = false
 
+window.Vue = Vue;
+
+//临时引入
+import baseData from './config/pageConfig';
 
 let render = async function () {
-    let baseData = await getJson("/main/module/ccb.json");
-    baseData = JSON.parse(baseData);
+    //let baseData = await getJson("https://github.com/ksfe/fe-main-frame/blob/master/pageConfig.json");
+    // baseData = JSON.parse(baseData);
     let router = new vueRouter({
         routes: [
             {
