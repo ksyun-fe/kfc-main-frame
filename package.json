@@ -105,7 +105,7 @@
     "main": ".postcssrc.js",
     "repository": {
         "type": "git",
-        "url": "git@github.com:ksfe/fe-main-frame.git"
+        "url": "git@github.com:ksyun-fe/kfc-main-frame.git"
     },
     "license": "ISC"
 }
