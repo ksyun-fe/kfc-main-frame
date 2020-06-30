@@ -23,7 +23,7 @@
         "less": "^2.7.2",
         "less-loader": "^4.0.5",
         "monaco-editor": "^0.17.1",
-        "npm": "^6.9.0",
+        "npm": "^6.13.4",
         "promise": "^8.0.1",
         "sql-formatter": "^2.3.2",
         "stylus": "^0.54.5",
