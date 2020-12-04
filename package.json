@@ -15,7 +15,7 @@
         "axios": "^0.18.0",
         "babel-regenerator-runtime": "^6.5.0",
         "fast-memoize": "^2.5.1",
-        "highlight.js": "^9.13.1",
+        "highlight.js": "^10.4.1",
         "install": "^0.12.2",
         "intact-vue": "^0.4.8",
         "jsplumb": "^2.9.0",
