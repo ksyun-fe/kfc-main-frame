@@ -4,7 +4,18 @@ import {
 
 import {moduleConfigs} from './config';
 
+let moduleConfigs = null;
 let loadbar = new loading();
+
+// 注册全局app对象
+window.bapp = Object.assign(window.bapp || {}, {
+    serverName: null,
+    type: 'vue',
+    routes: [],
+    componentWillUnmount: function () {},
+    renderFns: {},
+    destoryFns: {}
+});
 
 function loadScript(url) {
     return new Promise((resolve) => {
@@ -34,8 +45,8 @@ function loadScript(url) {
     });
 }
 
-
 function loadCss(url) {
+    if (!url) return false;
     return new Promise((resolve) => {
         var head = document.getElementsByTagName('head')[0];
         var script = document.createElement('link');
@@ -60,21 +71,46 @@ function loadCss(url) {
 }
 
 // 挂载业务线数据
-function routerUtil(Vue, router) {
-    function registerApp({
-                             routes
-                         }) {
-        if (routes) {
+function routerUtil(Vue, router, renderVue) {
+    function registerApp(
+        {
+            routes
+        },
+        type = 'vue',
+        renderFn,
+        destoryFn
+    ) {
+        // vue register in main router
+        if (routes && type === 'vue') {
             // console.log(routes)
             router.addRoutes(routes);
+            window.bapp.routes = window.bapp.routes.concat(routes);
         }
+        // 非 vue || 单独部署的vue
+        if (type !== 'vue' && renderFn && typeof renderFn === 'function') {
+            // if (window.bapp.type === 'vue') {
+            // }
+            window.bapp.componentWillUnmount();
+            setTimeout(() => {
+                renderFn();
+            }, 0);
+        }
+        // 暂存项目名称
+        const serverName = getServiceName(location.hash.replace('#', ''));
+        // 暂存本次serverName
+        window.bapp.serverName = serverName;
+        // 存储本次react等其他应用 渲染方法
+        window.bapp.renderFns[serverName] = renderFn;
+        // 存储本次react等其他应用 销毁方法
+        window.bapp.destoryFns[serverName] = destoryFn;
+        // 设置当前渲染类型
+        window.bapp.type = type;
     }
 
-    window.bapp = Object.assign(window.bapp || {}, {
-        Vue,
-        router,
-        registerApp
-    });
+    window.bapp.Vue = Vue;
+    window.bapp.router = router;
+    window.bapp.renderVue = renderVue;
+    window.bapp.registerApp = registerApp;
 }
 
 //加载第三方
@@ -107,20 +143,30 @@ const loadOtherModule = async function (name) {
 
 //加载相应js，css
 const loadJsCss = async function (name, href, url) {
-    //load 第三方js
+    // load 第三方js
+    loadbar.start();
     await loadOtherModule(name);
-    await loadScript(url);
+    loadbar.middle();
     await loadCss(href);
-    // await loadScript(url);
-}
+    if (Object.prototype.toString.call(url) === '[object Array]') {
+        for (let i = 0; i < url.length; i++) {
+            await loadScript(url[i]);
+        }
+    } else {
+        await loadScript(url);
+    }
+    loadbar.stop();
+};
+
+const getServiceName = function (path) {
+    let paths = path.split('/');
+    return paths[1];
+};
 
 //router方法
 const handle = async (to, from, next, config) => {
-    let path = to.path || "";
-    let paths = path.split('/');
-    // let reg = /\-\w{1,}$/;
-    // let serviceName = paths[1].replace(reg, '');
-    let serviceName = paths[1];
+    let path = to.path || '';
+    const serviceName = getServiceName(path);
     //console.log('path: ', serviceName);
     let cfg = config[serviceName];
 
@@ -147,5 +193,6 @@ const handle = async (to, from, next, config) => {
 
 module.exports = {
     handle,
-    routerUtil
+    routerUtil,
+    getServiceName
 }
