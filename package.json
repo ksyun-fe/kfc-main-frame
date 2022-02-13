@@ -11,7 +11,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "ajv": "^5.2.2",
+        "ajv": "^6.12.3",
         "axios": "^0.18.0",
         "babel-regenerator-runtime": "^6.5.0",
         "fast-memoize": "^2.5.1",
